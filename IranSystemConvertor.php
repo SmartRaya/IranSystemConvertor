@@ -8,6 +8,11 @@ namespace webafrooz;
  * Source:https://en.wikipedia.org/wiki/Iran_System_encoding_standard
  * License Under MIT License.
  * Copyright 2016 Webafrooz.com.
+ ***********************************
+ * Edited By: Keivan Sohrabloo
+ * Email: k.sohrabloo.k@gmail.com
+ * Fixed number and En Character order
+ *
  */
 if(!function_exists("mb_str_split")){
     function mb_str_split($string,$string_length=1) {
@@ -280,7 +285,29 @@ class IranSystem{
                 }
             }
         }
+	$out = self::enNumFix($out);
         return $out;
     }
+    Public Static function enNumFix($str){
+	$str = str_split($str);
+	$out="";
+	$temp="";
+	foreach($str as $rec){
+		If ($rec == "(")	$rec = ")";
+		ElseIf ($rec == ")") $rec = "(";
+		If (((ord($rec) >= ord("a")) And (ord($rec) <= ord("z")))
+			Or ((ord($rec) >= ord("A")) And (ord($rec) <= ord("Z")))
+			Or ((ord($rec) >= ord("0")) And (ord($rec) <= ord("9")))
+			Or $rec=="/" 
+			Or $rec==" ")	$temp = $rec.$temp;
+			Else{
+				$out.=$temp.$rec;
+				$temp = "";
+				
+			}
+	}
+	If ($temp != "") $out.=$temp;
+	return $out;
+}
 }
 ?>
